@@ -31,6 +31,7 @@ namespace Xamarin.Forms.Platform.iOS
 		bool _hasNavigationBar;
 		UIImage _defaultNavBarShadowImage;
 		UIImage _defaultNavBarBackImage;
+		bool _disposed;
 
 		[Preserve(Conditional = true)]
 		public NavigationRenderer() : base(typeof(FormsNavigationBar), null)
@@ -247,6 +248,13 @@ namespace Xamarin.Forms.Platform.iOS
 
 		protected override void Dispose(bool disposing)
 		{
+			if (_disposed)
+			{
+				return;
+			}
+
+			_disposed = true;
+
 			if (disposing)
 			{
 				MessagingCenter.Unsubscribe<IVisualElementRenderer>(this, UpdateToolbarButtons);
@@ -275,7 +283,8 @@ namespace Xamarin.Forms.Platform.iOS
 			}
 
 			base.Dispose(disposing);
-			if (_appeared)
+
+			if (disposing && _appeared)
 			{
 				PageController.SendDisappearing();
 
@@ -348,6 +357,17 @@ namespace Xamarin.Forms.Platform.iOS
 			UpdateToolBarVisible();
 			return shown;
 		}
+
+		public override void TraitCollectionDidChange(UITraitCollection previousTraitCollection)
+		{
+			base.TraitCollectionDidChange(previousTraitCollection);
+#if __XCODE11__
+			// Make sure the control adheres to changes in UI theme
+			if (previousTraitCollection?.UserInterfaceStyle != TraitCollection.UserInterfaceStyle)
+				UpdateBackgroundColor();
+#endif
+		}
+
 
 		ParentingViewController CreateViewControllerForPage(Page page)
 		{
@@ -475,10 +495,30 @@ namespace Xamarin.Forms.Platform.iOS
 			if (_defaultNavBarShadowImage == null)
 				_defaultNavBarShadowImage = NavigationBar.ShadowImage;
 
-			if (shouldHide)
-				NavigationBar.ShadowImage = new UIImage();
+#if __XCODE11__
+			if (Forms.IsiOS13OrNewer)
+			{
+				if (shouldHide)
+				{
+					NavigationBar.CompactAppearance.ShadowColor = UIColor.Clear;
+					NavigationBar.StandardAppearance.ShadowColor = UIColor.Clear;
+					NavigationBar.ScrollEdgeAppearance.ShadowColor = UIColor.Clear;
+				}
+				else
+				{
+					NavigationBar.CompactAppearance.ShadowColor = UIColor.FromRGBA(0, 0, 0, 76); //default ios13 shadow color
+					NavigationBar.StandardAppearance.ShadowColor = UIColor.FromRGBA(0, 0, 0, 76);
+					NavigationBar.ScrollEdgeAppearance.ShadowColor = UIColor.FromRGBA(0, 0, 0, 76);
+				}
+			}
 			else
-				NavigationBar.ShadowImage = _defaultNavBarShadowImage;
+#endif
+			{
+				if (shouldHide)
+					NavigationBar.ShadowImage = new UIImage();
+				else
+					NavigationBar.ShadowImage = _defaultNavBarShadowImage;
+			}
 
 			if (!Forms.IsiOS11OrNewer)
 			{
@@ -611,7 +651,7 @@ namespace Xamarin.Forms.Platform.iOS
 
 		void UpdateBackgroundColor()
 		{
-			var color = Element.BackgroundColor == Color.Default ? Color.White : Element.BackgroundColor;
+			var color = Element.BackgroundColor == Color.Default ? ColorExtensions.BackgroundColor.ToColor() : Element.BackgroundColor;
 			View.BackgroundColor = color.ToUIColor();
 		}
 
@@ -622,7 +662,7 @@ namespace Xamarin.Forms.Platform.iOS
 #if __XCODE11__
 			if (Forms.IsiOS13OrNewer)
 			{
-				var navigationBarAppearance = new UINavigationBarAppearance();
+				var navigationBarAppearance = NavigationBar.StandardAppearance;
 
 				if (barBackgroundColor == Color.Default)
 					navigationBarAppearance.ConfigureWithDefaultBackground();
@@ -939,6 +979,7 @@ namespace Xamarin.Forms.Platform.iOS
 			readonly WeakReference<NavigationRenderer> _navigation;
 
 			Page _child;
+			bool _disposed;
 			ToolbarTracker _tracker = new ToolbarTracker();
 
 			public ParentingViewController(NavigationRenderer navigation)
@@ -1050,12 +1091,18 @@ namespace Xamarin.Forms.Platform.iOS
 
 			protected override void Dispose(bool disposing)
 			{
+				if (_disposed)
+				{
+					return;
+				}
+
+				_disposed = true;
+
 				if (disposing)
 				{
-					Child.SendDisappearing();
-
 					if (Child != null)
 					{
+						Child.SendDisappearing();
 						Child.PropertyChanged -= HandleChildPropertyChanged;
 						Child = null;
 					}
@@ -1076,6 +1123,7 @@ namespace Xamarin.Forms.Platform.iOS
 							ToolbarItems[i].Dispose();
 					}
 				}
+
 				base.Dispose(disposing);
 			}
 
@@ -1438,6 +1486,7 @@ namespace Xamarin.Forms.Platform.iOS
 			FormsNavigationBar _bar;
 			IVisualElementRenderer _child;
 			UIImageView _icon;
+			bool _disposed;
 
 			public Container(View view, UINavigationBar bar) : base(bar.Bounds)
 			{
@@ -1553,6 +1602,13 @@ namespace Xamarin.Forms.Platform.iOS
 
 			protected override void Dispose(bool disposing)
 			{
+				if (_disposed)
+				{
+					return;
+				}
+
+				_disposed = true;
+
 				if (disposing)
 				{
 
@@ -1569,6 +1625,7 @@ namespace Xamarin.Forms.Platform.iOS
 					_icon?.Dispose();
 					_icon = null;
 				}
+
 				base.Dispose(disposing);
 			}
 		}

@@ -247,6 +247,9 @@ namespace Xamarin.Forms.Core.UnitTests
 		[Test]
 		public async Task RelativeGoTo()
 		{
+			Routing.RegisterRoute("RelativeGoTo_Page1", typeof(ContentPage));
+			Routing.RegisterRoute("RelativeGoTo_Page2", typeof(ContentPage));
+
 			var shell = new Shell
 			{
 			};
@@ -281,6 +284,15 @@ namespace Xamarin.Forms.Core.UnitTests
 			await shell.GoToAsync("/tab23", false, true);
 			Assert.That(shell.CurrentState.Location.ToString(), Is.EqualTo("//two/tab23/content"));
 
+			await shell.GoToAsync("RelativeGoTo_Page1", false);
+			Assert.That(shell.CurrentState.Location.ToString(), Is.EqualTo("//two/tab23/content/RelativeGoTo_Page1"));
+
+			await shell.GoToAsync("../RelativeGoTo_Page2", false);
+			Assert.That(shell.CurrentState.Location.ToString(), Is.EqualTo("//two/tab23/content/RelativeGoTo_Page2"));
+
+			await shell.GoToAsync("..", false);
+			Assert.That(shell.CurrentState.Location.ToString(), Is.EqualTo("//two/tab23/content"));
+
 			/*
 			 * removing support for .. notation for now
 			await shell.GoToAsync("../one/tab11");
@@ -299,6 +311,33 @@ namespace Xamarin.Forms.Core.UnitTests
 			await shell.GoToAsync(new ShellNavigationState($"../one/tab11#fragment"));
 			Assert.That(shell.CurrentState.Location.ToString(), Is.EqualTo("app:///s/one/tab11/content/"));
 			*/
+		}
+
+		[Test]
+		public async Task RoutePathDefaultRemovalWithGlobalRoutesKeepsOneDefaultRoute()
+		{
+			var shell = new Shell();
+			shell.Items.Add(CreateShellItem());
+
+			Routing.RegisterRoute(nameof(RoutePathDefaultRemovalWithGlobalRoutesKeepsOneDefaultRoute), typeof(ContentPage));
+			await shell.GoToAsync(nameof(RoutePathDefaultRemovalWithGlobalRoutesKeepsOneDefaultRoute));
+
+			// If all routes on the shell are default we still need to make sure it appends something that represents where you are in the
+			// shell structure
+			Assert.AreNotEqual($"//{nameof(RoutePathDefaultRemovalWithGlobalRoutesKeepsOneDefaultRoute)}", shell.CurrentState.Location.ToString());
+		}
+
+
+		[Test]
+		public async Task RoutePathDefaultRemovalWithGlobalRoutesKeepsOneNamedRoute()
+		{
+			var shell = new Shell();
+			shell.Items.Add(CreateShellItem(shellContentRoute: "content"));
+
+			Routing.RegisterRoute(nameof(RoutePathDefaultRemovalWithGlobalRoutesKeepsOneNamedRoute), typeof(ContentPage));
+			await shell.GoToAsync(nameof(RoutePathDefaultRemovalWithGlobalRoutesKeepsOneNamedRoute));
+
+			Assert.AreEqual($"//content/{nameof(RoutePathDefaultRemovalWithGlobalRoutesKeepsOneNamedRoute)}", shell.CurrentState.Location.ToString());
 		}
 
 		[Test]
@@ -928,6 +967,23 @@ namespace Xamarin.Forms.Core.UnitTests
 			Assert.IsNull(clearedSection.Parent);
 			Assert.AreEqual(2, item1.Items.Count);
 			Assert.AreEqual(section1, shell.CurrentItem.CurrentItem);
+		}
+
+		[Test]
+		public async Task ShellLocationRestoredWhenItemsAreReAdded()
+		{
+			var shell = new Shell();
+			shell.Items.Add(CreateShellItem(shellContentRoute: "root1"));
+			shell.Items.Add(CreateShellItem(shellContentRoute: "root2"));
+
+			await shell.GoToAsync("//root2");
+			Assert.AreEqual("//root2", shell.CurrentState.Location.ToString());
+
+			shell.Items.Add(CreateShellItem(shellContentRoute: "root1"));
+			shell.Items.Add(CreateShellItem(shellContentRoute: "root2"));
+
+			shell.Items.Clear();
+			Assert.AreEqual("//root2", shell.CurrentState.Location.ToString());
 		}
 	}
 }

@@ -18,17 +18,17 @@ PowerShell:
 //////////////////////////////////////////////////////////////////////
 // ADDINS
 //////////////////////////////////////////////////////////////////////
-#addin "nuget:?package=Cake.Xamarin&version=3.0.0"
-#addin "nuget:?package=Cake.Android.Adb&version=3.0.0"
-#addin "nuget:?package=Cake.Git&version=0.19.0"
+#addin "nuget:?package=Cake.Xamarin&version=3.0.2"
+#addin "nuget:?package=Cake.Android.Adb&version=3.2.0"
+#addin "nuget:?package=Cake.Git&version=0.21.0"
 #addin "nuget:?package=Cake.Android.SdkManager&version=3.0.2"
 #addin "nuget:?package=Cake.Boots&version=1.0.2.421"
 
-#addin "nuget:?package=Cake.FileHelpers&version=3.2.0"
+#addin "nuget:?package=Cake.FileHelpers&version=3.2.1"
 //////////////////////////////////////////////////////////////////////
 // TOOLS
 //////////////////////////////////////////////////////////////////////
-#tool nuget:?package=NUnit.ConsoleRunner&version=3.4.0
+#tool nuget:?package=NUnit.ConsoleRunner&version=3.11.1
 
 //////////////////////////////////////////////////////////////////////
 // ARGUMENTS
@@ -68,7 +68,7 @@ string monoPatchVersion = "";
 string monoMajorVersion = "";
 string monoVersion = "";
 
-if(buildForVS2017)
+if(buildForVS2017 || teamProject == "DevDiv")
 {
     // VS2017
     monoMajorVersion = "5.18.1";
@@ -78,15 +78,29 @@ if(buildForVS2017)
     macSDK_macos = $"https://bosstoragemirror.blob.core.windows.net/wrench/jenkins/xcode10.2/9c8d8e0a50e68d9abc8cd48fcd47a669e981fcc9/53/package/xamarin.mac-5.4.0.64.pkg";
 
 }
-
-if(String.IsNullOrWhiteSpace(monoPatchVersion))
-    monoVersion = $"{monoMajorVersion}";
 else
-    monoVersion = $"{monoMajorVersion}.{monoPatchVersion}";
-
-if(!String.IsNullOrWhiteSpace(monoVersion))
 {
-    monoSDK_macos = $"https://download.mono-project.com/archive/{monoMajorVersion}/macos-10-universal/MonoFramework-MDK-{monoVersion}.macos10.xamarin.universal.pkg";
+    // Xcode 11.3
+    monoMajorVersion = "";
+    monoPatchVersion = "";
+    androidSDK_macos = "https://download.visualstudio.microsoft.com/download/pr/8f94ca38-039a-4c9f-a51a-a6cb33c76a8c/aa46188c5f7a2e0c6f2d4bd4dc261604/xamarin.android-10.2.0.100.pkg";
+    iOSSDK_macos = $"https://download.visualstudio.microsoft.com/download/pr/8f94ca38-039a-4c9f-a51a-a6cb33c76a8c/21e09d8084eb7c15eaa07c970e0eccdc/xamarin.ios-13.14.1.39.pkg";
+    macSDK_macos = $"https://download.visualstudio.microsoft.com/download/pr/8f94ca38-039a-4c9f-a51a-a6cb33c76a8c/979144aead55378df75482d35957cdc9/xamarin.mac-6.14.1.39.pkg";
+    monoSDK_macos = "https://download.visualstudio.microsoft.com/download/pr/8f94ca38-039a-4c9f-a51a-a6cb33c76a8c/3a376d8c817ec4d720ecca2d95ceb4c1/monoframework-mdk-6.8.0.123.macos10.xamarin.universal.pkg";
+
+}
+
+if(String.IsNullOrWhiteSpace(monoSDK_macos))
+{
+    if(String.IsNullOrWhiteSpace(monoPatchVersion))
+        monoVersion = $"{monoMajorVersion}";
+    else
+        monoVersion = $"{monoMajorVersion}.{monoPatchVersion}";
+
+    if(!String.IsNullOrWhiteSpace(monoVersion))
+    {
+        monoSDK_macos = $"https://download.mono-project.com/archive/{monoMajorVersion}/macos-10-universal/MonoFramework-MDK-{monoVersion}.macos10.xamarin.universal.pkg";
+    }
 }
     
 
@@ -256,7 +270,8 @@ Task("BuildForNuget")
         MSBuild("./Xamarin.Forms.Platform.UAP/Xamarin.Forms.Platform.UAP.csproj",
                     msbuildSettings
                         .WithTarget("rebuild")
-                        .WithProperty("DisableEmbeddedXbf", "false"));
+                        .WithProperty("DisableEmbeddedXbf", "false")
+                        .WithProperty("EnableTypeInfoReflection", "false"));
 
         binaryLogger.FileName = $"{artifactStagingDirectory}/ios-{configuration}-csproj.binlog";
         MSBuild("./Xamarin.Forms.Platform.iOS/Xamarin.Forms.Platform.iOS.csproj",
