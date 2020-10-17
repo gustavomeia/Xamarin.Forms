@@ -1,0 +1,21 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage
+    x:Class="Xamarin.Forms.Controls.XamlPerformanceTests.MainPage"
+    xmlns="http://xamarin.com/schemas/2014/forms"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:d="http://xamarin.com/schemas/2014/forms/design"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    mc:Ignorable="d">
+    <StackLayout VerticalOptions="Center">
+        <Button Clicked="MelhorLayoutAntes" Text="Melhor Layout (Antes)" />
+        <Button Clicked="MelhorLayoutDepois" Text="Melhor Layout (Depois)" />
+
+        <Button Clicked="GridAutoAntes" Text="Grid Auto (Antes)" />
+        <Button Clicked="GridAutoDepois" Text="Grid Auto (Depois)" />
+
+        <Button Clicked="VerticalHorizontalOptionsAntes" Text="Vertical/Horizontal Options (Antes)" />
+        <Button Clicked="VerticalHorizontalOptionsDepois" Text="Vertical/Horizontal Options (Depois)" />
+
+        <Button Clicked="ExpandsExemplos" Text="Expands (Exemplos)" />
+    </StackLayout>
+</ContentPage>

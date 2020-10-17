@@ -1,0 +1,8 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<xamlperformancetests:ContentPagePerformanceProvider
+    x:Class="Xamarin.Forms.Controls.XamlPerformanceTests.Views.VerticalHorizontalOptionsDepois"
+    xmlns="http://xamarin.com/schemas/2014/forms"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:xamlperformancetests="clr-namespace:Xamarin.Forms.Controls.XamlPerformanceTests">
+    <Label x:Name="lbl1" Text="---" />
+</xamlperformancetests:ContentPagePerformanceProvider>

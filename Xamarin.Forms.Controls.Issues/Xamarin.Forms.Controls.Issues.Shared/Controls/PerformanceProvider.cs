@@ -61,7 +61,9 @@ namespace Xamarin.Forms.Controls
 		public void DumpStats()
 		{
 			var b = new StringBuilder();
-			b.AppendLine("ID                                                                          | Call Count | Total Time | Avg Time");
+			b.AppendFormat("{0,-80} | {1,-10} | {2,-10}ms | {3,-8}ms", "ID", "Call Count", "Total Time", "Avg Time");
+			b.AppendLine();
+
 			foreach (KeyValuePair<string, Statistic> kvp in Statistics.OrderBy(kvp => kvp.Key))
 			{
 				string key = ShortenPath(kvp.Key);
