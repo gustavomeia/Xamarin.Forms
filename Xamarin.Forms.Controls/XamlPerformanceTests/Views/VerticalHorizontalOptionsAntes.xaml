@@ -6,7 +6,7 @@
     xmlns:xamlperformancetests="clr-namespace:Xamarin.Forms.Controls.XamlPerformanceTests">
     <Label
         x:Name="lbl1"
-        HorizontalOptions="FillAndExpand"
+        HorizontalOptions="Center"
         Text="---"
-        VerticalOptions="FillAndExpand" />
+        VerticalOptions="Center" />
 </xamlperformancetests:ContentPagePerformanceProvider>

@@ -64,14 +64,22 @@ namespace Xamarin.Forms.Controls
 			b.AppendFormat("{0,-80} | {1,-10} | {2,-10}ms | {3,-8}ms", "ID", "Call Count", "Total Time", "Avg Time");
 			b.AppendLine();
 
+			double totalCount = 0;
+			double totalTime = 0;
+
 			foreach (KeyValuePair<string, Statistic> kvp in Statistics.OrderBy(kvp => kvp.Key))
 			{
 				string key = ShortenPath(kvp.Key);
 				double total = TimeSpan.FromTicks(kvp.Value.TotalTime).TotalMilliseconds;
 				double avg = total / kvp.Value.CallCount;
+				totalCount += kvp.Value.CallCount;
+				totalTime += total;
 				b.AppendFormat("{0,-80} | {1,-10} | {2,-10}ms | {3,-8}ms", key, kvp.Value.CallCount, total, avg);
 				b.AppendLine();
 			}
+			b.AppendFormat("{0,-80} | {1,-10} | {2,-10}ms", "TOTAL:", totalCount, totalTime);
+			b.AppendLine();
+
 			Debug.WriteLine(b.ToString());
 		}
 

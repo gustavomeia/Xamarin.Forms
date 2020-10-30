@@ -5,8 +5,7 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
     xmlns:xamlperformancetests="clr-namespace:Xamarin.Forms.Controls.XamlPerformanceTests"
     Padding="0,20,0,0">
-    <Grid ColumnDefinitions="100,*" RowDefinitions="42,42,42,42">
-
+    <Grid ColumnDefinitions="100,*" RowDefinitions="32,32,32,32">
         <Label Text="Name:" />
         <Entry Grid.Column="1" Placeholder="Enter your name" />
 
