@@ -1333,7 +1333,7 @@ namespace Xamarin.Forms.Platform.Android
 
 		public static SizeRequest GetNativeSize(VisualElement view, double widthConstraint, double heightConstraint)
 		{
-			Performance.Start(out string reference);
+			//Performance.Start(out string reference);
 
 			// FIXME: potential crash
 			IVisualElementRenderer visualElementRenderer = GetRenderer(view);
@@ -1368,7 +1368,7 @@ namespace Xamarin.Forms.Platform.Android
 				(visualElementRenderer as IViewRenderer)?.MeasureExactly();
 			}
 
-			Performance.Stop(reference);
+			//Performance.Stop(reference);
 			return result;
 		}
 

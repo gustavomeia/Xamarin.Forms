@@ -61,7 +61,7 @@ namespace Xamarin.Forms.Controls
 		public void DumpStats()
 		{
 			var b = new StringBuilder();
-			b.AppendFormat("{0,-80} | {1,-10} | {2,-10}ms | {3,-8}ms", "ID", "Call Count", "Total Time", "Avg Time");
+			b.AppendFormat("{0,-75} | {1,-10} | {2,-10}ms | {3,-8}ms", "ID", "Call Count", "Total Time", "Avg Time");
 			b.AppendLine();
 
 			double totalCount = 0;

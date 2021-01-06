@@ -21,6 +21,11 @@
     <DefineConstants>$(DefineConstants);__UWP__</DefineConstants>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Remove="XamlPerformanceTests\ViewModels\**" />
+    <EmbeddedResource Remove="XamlPerformanceTests\ViewModels\**" />
+    <None Remove="XamlPerformanceTests\ViewModels\**" />
+  </ItemGroup>
+  <ItemGroup>
     <None Remove="BuildNumber.txt" />
     <None Remove="Fonts\CuteFont-Regular.ttf" />
     <None Remove="Fonts\Dokdo-Regular.ttf" />
@@ -88,7 +93,6 @@
   <ItemGroup>
     <Folder Include="Fonts\" />
     <Folder Include="GalleryPages\AppThemeGalleries\" />
-    <Folder Include="XamlPerformanceTests\ViewModels\" />
   </ItemGroup>
 
   <ItemGroup>
@@ -111,6 +115,12 @@
       <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
     </EmbeddedResource>
     <EmbeddedResource Update="XamlPerformanceTests\Views\GridAutoDepois.xaml">
+      <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
+    </EmbeddedResource>
+    <EmbeddedResource Update="XamlPerformanceTests\Views\ListaDentroDeScrollAntes.xaml">
+      <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
+    </EmbeddedResource>
+    <EmbeddedResource Update="XamlPerformanceTests\Views\ListaDentroDeScrollDepois.xaml">
       <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
     </EmbeddedResource>
     <EmbeddedResource Update="XamlPerformanceTests\Views\MelhorLayoutAntes.xaml">

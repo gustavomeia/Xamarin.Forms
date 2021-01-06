@@ -52,7 +52,7 @@ namespace Xamarin.Forms.Platform.Android
 
 		static void OnElementChanged(object sender, VisualElementChangedEventArgs e)
 		{
-			Performance.Start(out string reference);
+			//Performance.Start(out string reference);
 			if (e.OldElement != null)
 			{
 				e.OldElement.PropertyChanged -= OnElementPropertyChanged;
@@ -66,7 +66,7 @@ namespace Xamarin.Forms.Platform.Android
 				UpdateBackground(renderer?.View, renderer?.Element);
 			}
 
-			Performance.Stop(reference);
+			//Performance.Stop(reference);
 		}
 
 

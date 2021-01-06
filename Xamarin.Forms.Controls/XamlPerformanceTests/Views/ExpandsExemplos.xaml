@@ -2,91 +2,9 @@
 <ContentPage
     x:Class="Xamarin.Forms.Controls.XamlPerformanceTests.Views.ExpandsExemplos"
     xmlns="http://xamarin.com/schemas/2014/forms"
-    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml">
-    <Grid RowDefinitions="50,50,50,50,50,50,50,50,50,50">
-        <!--  Fill | FillAndExpand  -->
-        <Label
-            Grid.Row="0"
-            BackgroundColor="Red"
-            HorizontalOptions="Fill"
-            Text="Fill" />
-        <Label
-            Grid.Row="1"
-            BackgroundColor="Green"
-            HorizontalOptions="FillAndExpand"
-            Text="FillAndExpand" />
-
-        <!--  Start | StartAndExpand  -->
-        <Label
-            Grid.Row="2"
-            BackgroundColor="Red"
-            HorizontalOptions="Start"
-            Text="Start" />
-        <Label
-            Grid.Row="3"
-            BackgroundColor="Green"
-            HorizontalOptions="StartAndExpand"
-            Text="StartAndExpand" />
-
-        <!--  Center | CenterAndExpand  -->
-        <Label
-            Grid.Row="4"
-            BackgroundColor="Red"
-            HorizontalOptions="Center"
-            Text="Center" />
-        <Label
-            Grid.Row="5"
-            BackgroundColor="Green"
-            HorizontalOptions="CenterAndExpand"
-            Text="CenterAndExpand" />
-
-        <!--  Stacks  -->
-        <StackLayout
-            Grid.Row="6"
-            BackgroundColor="Gray"
-            Orientation="Horizontal">
-            <Label BackgroundColor="Red" Text="Default" />
-            <Label
-                BackgroundColor="Blue"
-                HorizontalOptions="StartAndExpand"
-                Text="StartAndExpand" />
-            <Label BackgroundColor="Green" Text="Default" />
-        </StackLayout>
-
-        <StackLayout
-            Grid.Row="7"
-            BackgroundColor="White"
-            Orientation="Horizontal">
-            <Label BackgroundColor="Red" Text="Default" />
-            <Label
-                BackgroundColor="Blue"
-                HorizontalOptions="CenterAndExpand"
-                Text="CenterAndExpand" />
-            <Label BackgroundColor="Green" Text="Default" />
-        </StackLayout>
-
-        <StackLayout
-            Grid.Row="8"
-            BackgroundColor="Gray"
-            Orientation="Horizontal">
-            <Label BackgroundColor="Red" Text="Default" />
-            <Label
-                BackgroundColor="Blue"
-                HorizontalOptions="EndAndExpand"
-                Text="EndAndExpand" />
-            <Label BackgroundColor="Green" Text="Default" />
-        </StackLayout>
-
-        <StackLayout
-            Grid.Row="9"
-            BackgroundColor="White"
-            Orientation="Horizontal">
-            <Label BackgroundColor="Red" Text="Default" />
-            <Label
-                BackgroundColor="Blue"
-                HorizontalOptions="FillAndExpand"
-                Text="FillAndExpand" />
-            <Label BackgroundColor="Green" Text="Default" />
-        </StackLayout>
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    x:Name="page">
+    <Grid BackgroundColor="Gray">
+        <Label Background="Blue" Text="label" />
     </Grid>
 </ContentPage>
